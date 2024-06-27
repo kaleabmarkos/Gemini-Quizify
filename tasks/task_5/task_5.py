@@ -5,7 +5,6 @@ sys.path.append(os.path.abspath('../../'))
 from tasks.task_3.task_3 import DocumentProcessor
 from tasks.task_4.task_4 import EmbeddingClient
 
-
 # Import Task libraries
 from langchain_core.documents import Document
 from langchain.text_splitter import CharacterTextSplitter
@@ -54,22 +53,65 @@ class ChromaCollectionCreator:
             return
 
         # Step 2: Split documents into text chunks
-        # Use a TextSplitter from Langchain to split the documents into smaller text chunks
-        # https://python.langchain.com/docs/modules/data_connection/document_transformers/character_text_splitter
-        # [Your code here for splitting documents]
-        
-        if texts is not None:
-            st.success(f"Successfully split pages to {len(texts)} documents!", icon="✅")
+        text_splitter = CharacterTextSplitter(
+            separator="\n\n",
+            chunk_size=1000,
+            chunk_overlap=200,
+            length_function=len,
+            is_separator_regex=False,
+        )
+
+        aux_array = list(map(lambda page: page.page_content, self.processor.pages))
+        texts = text_splitter.create_documents(aux_array)
+
+        # if texts is not None:
+        #     st.success(f"Successfully split pages to {len(texts)} documents!", icon="✅")
+         # Filter out empty or invalid texts
+        valid_texts = [text for text in texts if text.page_content.strip()]
+
+        if valid_texts:
+            st.success(f"Successfully split pages to {len(valid_texts)} valid documents!", icon="✅")
+        else:
+            st.error("Text splitting resulted in no valid texts!", icon="🚨")
+            return
+
+        # Debugging: Check the texts generated
+        st.write("First 5 valid texts:", valid_texts[:5])
+
+
 
         # Step 3: Create the Chroma Collection
-        # https://docs.trychroma.com/
-        # Create a Chroma in-memory client using the text chunks and the embeddings model
-        # [Your code here for creating Chroma collection]
-        
-        if self.db:
-            st.success("Successfully created Chroma Collection!", icon="✅")
-        else:
-            st.error("Failed to create Chroma Collection!", icon="🚨")
+        # try:
+        #     self.db = Chroma.from_documents(texts, self.embed_model.client, persist_directory="./chroma_db")
+        #     if self.db:
+        #         st.success("Successfully created Chroma Collection!", icon="✅")
+        try:
+        # Ensure texts and embeddings are properly aligned
+            if not texts or len(texts) == 0:
+                st.error("No valid texts to process!", icon="🚨")
+                return
+            
+            embeddings = self.embed_model.client.embed_documents([text.page_content for text in texts])
+
+            if len(embeddings) != len(texts):
+                st.error(f"Embeddings count {len(embeddings)} does not match text count {len(texts)}!", icon='🚨')
+                st.write("Embeddings:", embeddings[:5])
+                return
+
+            # Create Chroma Collection
+            self.db = Chroma.from_documents(
+                documents=texts,
+                embedding=self.embed_model.client,
+                persist_directory="./chroma_db"
+            )
+
+            if self.db:
+                st.success("Successfully created Chroma Collection!", icon="✅")
+        except Exception as e:
+            st.error(f"Failed to create Chroma Collection: {e}", icon="🚨")
+            st.write("Texts length:", len(texts))
+            st.write("Sample texts:", texts[:5])
+
     
     def query_chroma_collection(self, query) -> Document:
         """
@@ -93,7 +135,7 @@ if __name__ == "__main__":
     
     embed_config = {
         "model_name": "textembedding-gecko@003",
-        "project": "YOUR PROJECT ID HERE",
+        "project": "quizify-427421",
         "location": "us-central1"
     }
     
