@@ -65,24 +65,25 @@ class DocumentProcessor:
                 with open(temp_file_path, 'wb') as f:
                     f.write(uploaded_file.getvalue())
                 
-                loader = PyPDFLoader(temp_file_path)
-                pdf_pages = loader.load()
-
-                self.pages.extend(pdf_pages)
-
-                os.unlink(temp_file_path)
-                
-
-                # Process the temporary file
+                #Process the temporary file
                 #####################################
                 # Use PyPDFLoader here to load the PDF and extract pages.
-                # https://python.langchain.com/docs/modules/data_connection/document_loaders/pdf#using-pypdf
+                # https://python.langchain.com/docs/modules/data_connection/document_loaders/pdf#using-pypdf                
+                # You will need to figure out how to use PyPDFLoader to process the temporary file.
                 
-                
+                loader = PyPDFLoader(temp_file_path)
+                pdf_pages = loader.load_and_split()
+
+
                 # Then, Add the extracted pages to the 'pages' list.
-                #####################################
+                #####################################                
+                for i in pdf_pages:
+                    self.pages.append(i)
+
                 
                 # Clean up by deleting the temporary file.
+                
+                
                 #used if statement because it might clean it before unlinking the pages
                 if os.path.exists(temp_file_path):
                     os.unlink(temp_file_path)

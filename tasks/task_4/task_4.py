@@ -27,7 +27,7 @@ class EmbeddingClient:
     - project: The Google Cloud project ID where the embedding model is hosted.
     - location: The location of the Google Cloud project, such as 'us-central1'.
 
-    TO-DO:
+    The plan:
     - Carefully initialize the 'self.client' with VertexAIEmbeddings in the __init__ method using the parameters.
     - Pay attention to how each parameter is used to configure the embedding client.
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     vectors = embedding_client.embed_query("Hello World!")
 
     if vectors:
-        st.write("Successfully used the embedding client!")
-        st.write(vectors)
+        print(vectors)
+        print("Successfully used the embedding client!")
     else:
         st.write("Failed to use the embedding client.")

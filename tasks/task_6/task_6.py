@@ -5,12 +5,15 @@ sys.path.append(os.path.abspath('../../'))
 from tasks.task_3.task_3 import DocumentProcessor
 from tasks.task_4.task_4 import EmbeddingClient
 from tasks.task_5.task_5 import ChromaCollectionCreator
+from langchain_google_vertexai import VertexAIEmbeddings
+
+
 
 f"""
 Task: Build a Quiz Builder with Streamlit and LangChain
 
 Overview:
-In this task, you will leverage your skills acquired from previous tasks to create a "Quiz Builder" application utilizing Streamlit. This interactive application enables users to upload documents, designate a quiz topic, select a number of questions, and subsequently generate a quiz based on the uploaded document contents.
+This interactive application enables users to upload documents, designate a quiz topic, select a number of questions, and subsequently generate a quiz based on the uploaded document contents.
 
 Components to Integrate:
 - DocumentProcessor: A class developed in Task 3 for processing uploaded PDF documents.
@@ -33,8 +36,6 @@ Step-by-Step Instructions:
 Implementation Guidance:
 - Deploy Streamlit's widgets such as `st.header`, `st.subheader`, `st.text_input`, and `st.slider` to craft an engaging form. This form should accurately capture the user's inputs for both the quiz topic and the number of questions desired.
 
-- Post form submission, verify that the documents have been processed and that a Chroma collection has been successfully created. The build-in methods will communicate the outcome of these operations to the user through appropriate feedback.
-
 - Lastly, introduce a query input field post-Chroma collection creation. This field will gather user queries for generating quiz questions, showcasing the utility of the Chroma collection in sourcing information relevant to the quiz topic.
 
 """
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     # Configuration for EmbeddingClient
     embed_config = {
         "model_name": "textembedding-gecko@003",
-        "project": "YOUR PROJECT ID HERE",
+        "project": "quizify-427421",
         "location": "us-central1"
     }
     
@@ -54,8 +55,12 @@ if __name__ == "__main__":
         st.header("Quizzify")
         ####### YOUR CODE HERE #######
         # 1) Initalize DocumentProcessor and Ingest Documents from Task 3
+        processor = DocumentProcessor()
+        processor.ingest_documents()
         # 2) Initalize the EmbeddingClient from Task 4 with embed config
+        embedding_client = EmbeddingClient(**embed_config)
         # 3) Initialize the ChromaCollectionCreator from Task 5
+        chroma_creator = ChromaCollectionCreator(processor, embedding_client)
         ####### YOUR CODE HERE #######
 
         with st.form("Load Data to Chroma"):
@@ -64,7 +69,9 @@ if __name__ == "__main__":
             
             ####### YOUR CODE HERE #######
             # 4) Use streamlit widgets to capture the user's input
+            topic_input = st.text_input("Enter the quiz topic")
             # 4) for the quiz topic and the desired number of questions
+            number_input = st.number_input("Enter the number of questions", min_value=1, max_value=100, value=10)
             ####### YOUR CODE HERE #######
             
             document = None
@@ -74,9 +81,11 @@ if __name__ == "__main__":
                 ####### YOUR CODE HERE #######
                 # 5) Use the create_chroma_collection() method to create a Chroma collection from the processed documents
                 ####### YOUR CODE HERE #######
+                chroma_creator.create_chroma_collection()
                     
                 # Uncomment the following lines to test the query_chroma_collection() method
-                # document = chroma_creator.query_chroma_collection(topic_input) 
+
+                document = chroma_creator.query_chroma_collection(topic_input) 
                 
     if document:
         screen.empty() # Screen 2
