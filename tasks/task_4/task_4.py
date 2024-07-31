@@ -39,7 +39,6 @@ class EmbeddingClient:
         # Read about the VertexAIEmbeddings wrapper from Langchain here
         # https://python.langchain.com/docs/integrations/text_embedding/google_generative_ai
         self.client = VertexAIEmbeddings(
-            #### YOUR CODE HERE ####
             model_name=model_name,
             project=project,
             location=location
@@ -82,7 +81,7 @@ if __name__ == "__main__":
     vectors = embedding_client.embed_query("Hello World!")
 
     if vectors:
-        print(vectors)
-        print("Successfully used the embedding client!")
+        st.write(vectors)
+        st.write("Successfully used the embedding client!")
     else:
         st.write("Failed to use the embedding client.")

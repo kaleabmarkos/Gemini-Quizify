@@ -38,6 +38,8 @@ Implementation Guidance:
 
 - Lastly, introduce a query input field post-Chroma collection creation. This field will gather user queries for generating quiz questions, showcasing the utility of the Chroma collection in sourcing information relevant to the quiz topic.
 
+- Video Tutorial I used on ChromaDB -> https://youtu.be/QSW2L8dkaZk
+- ChromaDB Getting Started -> https://docs.trychroma.com/getting-started
 """
 
 if __name__ == "__main__":
@@ -52,15 +54,17 @@ if __name__ == "__main__":
     
     screen = st.empty() # Screen 1, ingest documents
     with screen.container():
-        st.header("Quizzify")
         ####### YOUR CODE HERE #######
         # 1) Initalize DocumentProcessor and Ingest Documents from Task 3
         processor = DocumentProcessor()
         processor.ingest_documents()
+
         # 2) Initalize the EmbeddingClient from Task 4 with embed config
         embedding_client = EmbeddingClient(**embed_config)
+
         # 3) Initialize the ChromaCollectionCreator from Task 5
         chroma_creator = ChromaCollectionCreator(processor, embedding_client)
+
         ####### YOUR CODE HERE #######
 
         with st.form("Load Data to Chroma"):
@@ -69,9 +73,13 @@ if __name__ == "__main__":
             
             ####### YOUR CODE HERE #######
             # 4) Use streamlit widgets to capture the user's input
-            topic_input = st.text_input("Enter the quiz topic")
+            st.write("Topic for Generative Quiz")
+            topic_input = st.text_input(label="Topic for Generative Quiz", placeholder="Enter the quiz topic", label_visibility="hidden")
+
+
             # 4) for the quiz topic and the desired number of questions
-            number_input = st.number_input("Enter the number of questions", min_value=1, max_value=100, value=10)
+            st.write("Number of Quesions")
+            number_input = st.number_input(label="Enter the number of questions", min_value=1, max_value=10, value=1, label_visibility='hidden')
             ####### YOUR CODE HERE #######
             
             document = None
