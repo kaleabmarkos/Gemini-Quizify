@@ -140,7 +140,6 @@ class QuizGenerator:
 
 
         # Create a chain with the Retriever, PromptTemplate, and LLM
-        # HINT: chain = RETRIEVER | PROMPT | LLM 
 
 
         chain = setup_and_retrieval | prompt | self.llm
