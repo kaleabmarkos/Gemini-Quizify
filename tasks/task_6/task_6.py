@@ -7,9 +7,7 @@ from tasks.task_4.task_4 import EmbeddingClient
 from tasks.task_5.task_5 import ChromaCollectionCreator
 from langchain_google_vertexai import VertexAIEmbeddings
 
-
-
-f"""
+"""
 Task: Build a Quiz Builder with Streamlit and LangChain
 
 Overview:
@@ -36,8 +34,6 @@ Step-by-Step Instructions:
 Implementation Guidance:
 - Deploy Streamlit's widgets such as `st.header`, `st.subheader`, `st.text_input`, and `st.slider` to craft an engaging form. This form should accurately capture the user's inputs for both the quiz topic and the number of questions desired.
 
-- Lastly, introduce a query input field post-Chroma collection creation. This field will gather user queries for generating quiz questions, showcasing the utility of the Chroma collection in sourcing information relevant to the quiz topic.
-
 - Video Tutorial I used on ChromaDB -> https://youtu.be/QSW2L8dkaZk
 - ChromaDB Getting Started -> https://docs.trychroma.com/getting-started
 """
@@ -54,7 +50,6 @@ if __name__ == "__main__":
     
     screen = st.empty() # Screen 1, ingest documents
     with screen.container():
-        ####### YOUR CODE HERE #######
         # 1) Initalize DocumentProcessor and Ingest Documents from Task 3
         processor = DocumentProcessor()
         processor.ingest_documents()
@@ -65,13 +60,11 @@ if __name__ == "__main__":
         # 3) Initialize the ChromaCollectionCreator from Task 5
         chroma_creator = ChromaCollectionCreator(processor, embedding_client)
 
-        ####### YOUR CODE HERE #######
 
         with st.form("Load Data to Chroma"):
             st.subheader("Quiz Builder")
             st.write("Select PDFs for Ingestion, the topic for the quiz, and click Generate!")
             
-            ####### YOUR CODE HERE #######
             # 4) Use streamlit widgets to capture the user's input
             st.write("Topic for Generative Quiz")
             topic_input = st.text_input(label="Topic for Generative Quiz", placeholder="Enter the quiz topic", label_visibility="hidden")
@@ -80,20 +73,17 @@ if __name__ == "__main__":
             # 4) for the quiz topic and the desired number of questions
             st.write("Number of Quesions")
             number_input = st.number_input(label="Enter the number of questions", min_value=1, max_value=10, value=1, label_visibility='hidden')
-            ####### YOUR CODE HERE #######
             
             document = None
             
             submitted = st.form_submit_button("Generate a Quiz!")
             if submitted:
-                ####### YOUR CODE HERE #######
                 # 5) Use the create_chroma_collection() method to create a Chroma collection from the processed documents
-                ####### YOUR CODE HERE #######
                 chroma_creator.create_chroma_collection()
                     
                 # Uncomment the following lines to test the query_chroma_collection() method
 
-                document = chroma_creator.query_chroma_collection(topic_input) 
+                document = chroma_creator.query_chroma_collection(topic_input)
                 
     if document:
         screen.empty() # Screen 2

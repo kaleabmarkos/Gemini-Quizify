@@ -35,7 +35,7 @@ class ChromaCollectionCreator:
         https://python.langchain.com/docs/integrations/vectorstores/chroma#use-openai-embeddings
         https://docs.trychroma.com/getting-started
         
-        Instructions:
+        
         - Begin by verifying that there are processed pages available. If not, inform the user that no documents are found.
         
         - If documents are available, proceed to split these documents into smaller text chunks. This operation prepares the documents for embedding and indexing. Look into using the CharacterTextSplitter with appropriate parameters (e.g., separator, chunk_size, chunk_overlap).

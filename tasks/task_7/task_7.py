@@ -29,7 +29,7 @@ class QuizGenerator:
         self.system_template = """
             You are a subject matter expert on the topic: {topic}
             
-            Follow the instructions to create a quiz question:
+            Steps followed to create a quiz question:
             1. Generate a question based on the topic provided and context as key "question"
             2. Provide 4 multiple choice answers to the question as a list of key-value pairs "choices"
             3. Provide the correct answer for the question from the list of answers as key "answer"
@@ -56,7 +56,9 @@ class QuizGenerator:
         Task: Initialize the Large Language Model (LLM) for quiz question generation.
 
         Overview:
-        This method prepares the LLM for generating quiz questions by configuring essential parameters such as the model name, temperature, and maximum output tokens. The LLM will be used later to generate quiz questions based on the provided topic and context retrieved from the vectorstore.
+        This method prepares the LLM for generating quiz questions by configuring essential parameters 
+        such as the model name, temperature, and maximum output tokens. The LLM will be used later to 
+        generate quiz questions based on the provided topic and context retrieved from the vectorstore.
 
         Steps:
         1. Set the LLM's model name to "gemini-pro" 
@@ -85,7 +87,7 @@ class QuizGenerator:
         
     def generate_question_with_vectorstore(self):
         """
-        Task: Generate a quiz question using the topic provided and context from the vectorstore.
+        Goal: Generate a quiz question using the topic provided and context from the vectorstore.
 
         Overview:
         This method leverages the vectorstore to retrieve relevant context for the quiz topic, then utilizes the LLM to generate a structured quiz question in JSON format. The process involves retrieving documents, creating a prompt, and invoking the LLM to generate a question.
@@ -94,7 +96,7 @@ class QuizGenerator:
         - Ensure the LLM has been initialized using 'init_llm'.
         - A vectorstore must be provided and accessible via 'self.vectorstore'.
 
-        Steps:
+        Steps I followed to generate the questions:
         1. Verify the LLM and vectorstore are initialized and available.
         2. Retrieve relevant documents or context for the quiz topic from the vectorstore.
         3. Format the retrieved context and the quiz topic into a structured prompt using the system template.
@@ -122,15 +124,10 @@ class QuizGenerator:
 
 
         # Enable a Retriever using the as_retriever() method on the VectorStore object
-        # HINT: Use the vectorstore as the retriever initialized on the class
-
 
         retriever = self.vectorstore.db.as_retriever()
-        
 
         # Use the system template to create a PromptTemplate
-        # HINT: Use the .from_template method on the PromptTemplate class and pass in the system template
-
 
         prompt = PromptTemplate.from_template(self.system_template)
         
