@@ -45,11 +45,11 @@ The Quiz Builder Application is an interactive tool that allows users to generat
     │   ├── task_3.py              # Document processing logic
     │   ├── task_4.py              # Embedding client for Google Vertex AI
     │   ├── task_5.py              # Chroma collection creator
-    |   ├── task_6.py
-    |   ├── task_7.py
+    │   ├── task_6.py
+    │   ├── task_7.py
     │   ├── task_8.py              # Quiz generator logic
     │   ├── task_9.py              # Quiz manager for navigation
-    |   ├── task_10.py
+    │   ├── task_10.py
     │
     └── README.md                  # This README file
    ```
