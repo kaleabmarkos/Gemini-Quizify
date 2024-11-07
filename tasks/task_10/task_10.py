@@ -31,12 +31,12 @@ if __name__ == "__main__":
             with st.form("Load Data to Chroma"):
                 st.write("Select PDFs for Ingestion, the topic for the quiz, and click Generate!")
                 
-                processor = DocumentProcessor()
+                processor = DocumentProcessor() #task3
                 processor.ingest_documents()
             
-                embed_client = EmbeddingClient(**embed_config) 
+                embed_client = EmbeddingClient(**embed_config) #task4
             
-                chroma_creator = ChromaCollectionCreator(processor, embed_client)
+                chroma_creator = ChromaCollectionCreator(processor, embed_client) #task5
                 
                 # Step 2: Set topic input and number of questions
                 topic_input = st.text_input("Topic for Generative Quiz", placeholder="Enter the topic of the document")
